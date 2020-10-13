@@ -81,7 +81,7 @@ $ minigaia_convert -p /tmp/gaiadr2/ -o gdr2.db -c source_id ra dec phot_g_mean_m
 
 ```python
 #!/usr/bin/env python3
-import math
+import argparse
 from minigaia.db import MiniGaiaDB
 
 # Read arguments
@@ -99,9 +99,9 @@ print(gaia.headers())
 i = 0
 for star in gaia:
     print(star['source_id'], star['ra'], star['dec'], star['phot_g_mean_mag'])
-	i += 1
-	if i > 10:
-		break
+    i += 1
+    if i > 10:
+        break
 ```
 
 See more in the ``examples`` directory.
