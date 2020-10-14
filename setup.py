@@ -15,8 +15,8 @@ setuptools.setup(
     packages=['minigaia', 'minigaia.db', 'minigaia.dr2'],
     entry_points={
         'console_scripts': [
-            'minigaia_convert=minigaia_convert:main',
-            'minigaia_download=minigaia_download:main'
+            'minigaia_convert=minigaia.convert:main',
+            'minigaia_download=minigaia.download:main'
         ]
     },
     classifiers=[
