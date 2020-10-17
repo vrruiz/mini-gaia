@@ -75,7 +75,7 @@ def string_to_binary(string, to_type):
     return b
 
 
-def gaia2db(path, db_file, columns):
+def gaia2db(path, db_file, columns, filter_mag, max_mag):
     """ Reads Gaia DR2 csv.gz files and convert them to binary format """
     # Check columns
     db_format = gaia_pack_format(columns)
@@ -98,6 +98,12 @@ def gaia2db(path, db_file, columns):
             n = 0
             # Read rows (stars)
             for row in reader:
+                if filter_mag:
+                    # Check limit magnitude
+                    g = float(row['phot_g_mean_mag'])
+                    if (g > max_mag):
+                        # Faint star, don't add it to the database
+                        continue
                 binary_values = []
                 for column in columns:
                     # Convert column values
@@ -119,7 +125,8 @@ def main():
     parser = argparse.ArgumentParser(description='Process Gaia DR2 database to create a binary format file.')
     parser.add_argument('-p', '--path', help='Path to Gaia DR2 files (csv.gz).', required=True)
     parser.add_argument('-o', '--output', help='Name file of the output.', required=True)
-    parser.add_argument('-c', '--columns', nargs='+', help='', required=True)
+    parser.add_argument('-c', '--columns', nargs='+', help='Columns', required=True)
+    parser.add_argument('-m', '--max', help='Maximum magnitude. Discard fainter stars (phot_g_mean_mag).', required=False)
     args = parser.parse_args()
 
     # Check column names and types
@@ -133,9 +140,16 @@ def main():
             exit(1)
     binary_format = gaia_pack_format(args.columns)
     print(f"Format: {binary_format}")
+    # Check magnitude filter
+    filter_mag = False
+    max_mag = 0.0
+    if args.max:
+        filter_mag = True
+        max_mag = float(args.max)
+        print(f"Limit magnitude: {max_mag}")
 
     print(args.columns)
-    gaia2db(args.path, args.output, args.columns)
+    gaia2db(args.path, args.output, args.columns, filter_mag, max_mag)
 
 
 if (__name__ == '__main__'):
