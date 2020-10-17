@@ -17,7 +17,7 @@ gaia_pack_types = {
     'byte': 'B',
     'short': 'h',
     'int': 'i',
-    'long': 'l',
+    'long': 'L',
     'float': 'f',
     'double': 'd',
     'string': '255p',  # Pascal string: https://docs.python.org/3/library/struct.html
@@ -57,7 +57,7 @@ def string_to_binary(string, to_type):
     elif to_type == 'i':
         # Integer
         b = int(string)
-    elif to_type == 'l':
+    elif to_type == 'L':
         # Long
         b = int(string)
     elif to_type == 'f':
@@ -85,7 +85,7 @@ def gaia2db(path, db_file, columns):
     # Create database
     db_file = open(db_file, 'wb')
     # Headers
-    db_file.write(pack('256p', 'Mini Gaia DR2 1.0'.encode('ascii')))
+    db_file.write(pack('256p', 'Mini Gaia DB 1.0'.encode('ascii')))
     db_file.write(pack('256p', db_format.encode('ascii')))
     db_file.write(pack('256p', column_names.encode('ascii')))
     # Open list of Gaia DR2 files
